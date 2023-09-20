@@ -102,10 +102,11 @@ typedef struct builtin
 
 /* FUNCTION PROTOTYPES */
 /* shell.c */
-int hsh(info_t *, char **);
-void fork_cmd(info_t *);
-int find_builtin(info_t *);
-void find_cmd(info_t *);
+int hsh(info_t *data, char **argument_vector);
+int find_builtin(info_t *data);
+void find_cmd(info_t *data);
+void fork_cmd(info_t *data);
+
 int loophsh(char **);
 
 /* path functions */
@@ -124,21 +125,23 @@ int print_d(int input, int fd);
 char *convert_number(long int num, int base, int flags);
 void remove_comments(char *buf);
 
-
+/* 0_string.c */
+int _strlen(char *s);
+int _strcmp(char *s1, char *s2);
+char *starts_with(const char *haystack, const char *needle);
+char *_strcat(char *dest, char *src);
+/* 1_string.c*/
+char *_strcpy(char *dest, char *src);
+char *_strdup(const char *str);
+void _puts(char *str);
+int _putchar(char c);
 /*string_functions prototypes */
-char *starts_with(const char *, const char *);
-char *_strcat(char *, char *);
-char *_strdup(const char *);
-int _strlen(char *);
+char **strtow(char *str, char *d);
+char **strtow2(char *str, char d);
+
 char *_strncat(char *, char *, int);
 char *_strncpy(char *, char *, int);
 char *_strchr(char *, char);
-void _puts(char *);
-int _putchar(char);
-char *_strcpy(char *, char *);
-int _strcmp(char *, char *);
-char **strtow(char *, char *);
-char **strtow2(char *, char);
 
 /* memory functions */
 char *_memset(char *mem, char byte, unsigned int count);
@@ -193,11 +196,11 @@ int build_history_list(info_t *info, char *buf, int linecount);
 int renumber_history(info_t *info);
 
 /*var functions */
-int replace_alias(info_t *);
-int replace_vars(info_t *);
-int is_chain(info_t *, char *, size_t *);
-void check_chain(info_t *, char *, size_t *, size_t, size_t)
-int replace_string(char **, char *);
+int is_chain(info_t *info, char *buf, size_t *p);
+void check_chain(info_t *info, char *buf, size_t *p, size_t i, size_t len);
+int replace_alias(info_t *info);
+int replace_vars(info_t *info);
+int replace_string(char **old, char *new);
 
  /* node functioins */
 list_t *add_node(list_t **, const char *, int);

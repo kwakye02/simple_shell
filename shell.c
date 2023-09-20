@@ -1,5 +1,4 @@
-
-#include "shell.h"
+#include "main.h"
 
 /**
  *hsh - Primary shell loop
@@ -155,4 +154,3 @@ void fork_cmd(info_t *data)
 		}
 	}
 }
-
