@@ -101,12 +101,57 @@ typedef struct builtin
 } builtin_table;
 
 /* FUNCTION PROTOTYPES */
+/* shell.c */
+int hsh(info_t *, char **);
+void fork_cmd(info_t *);
+int find_builtin(info_t *);
+void find_cmd(info_t *);
+int loophsh(char **);
+
+/* path functions */
+char *dup_chars(char *, int, int);
+int is_cmd(info_t *, char *);
+char *find_path(info_t *, char *, char *);
+
+/* error_functions */
+int _eputchar(char);
+int _putfd(char c, int fd);
+void _eputs(char *);
+int _putsfd(char *str, int fd);
+
+/*string_functions prototypes */
+char *starts_with(const char *, const char *);
+char *_strcat(char *, char *);
+char *_strdup(const char *);
+int _strlen(char *);
+char *_strncat(char *, char *, int);
+char *_strncpy(char *, char *, int);
+char *_strchr(char *, char);
+void _puts(char *);
+int _putchar(char);
+char *_strcpy(char *, char *);
+int _strcmp(char *, char *);
+char **strtow(char *, char *);
+char **strtow2(char *, char);
+
+/* memory functions */
+char *_memset(char *, char, unsigned int);
+void ffree(char **);
+void *_realloc(void *, unsigned int, unsigned int);
+int bfree(void **);
 
 /*atoi.c*/
 int is_interactive_mode(data_t *data);
 int is_separator(char ch, char *separator);
 int is_letter(int ch);
 int str_to_int(char *str);
+int atoi(char *);
+/* error functions */
+void print_error(info_t *, char *);
+char *convert_number(long int, int, int);
+int _erratoi(char *);
+int print_d(int, int);
+void remove_comments(char *);
 
 /* builtin function */
 int shell_exit(info_t *data);
@@ -119,5 +164,51 @@ int remove_alias(info_t *data, char *str);
 int create_alias(info_t *data, char *str);
 int display_alias(list_t *alias_node);
 int manage_alias(info_t *data);
+
+/* getline functions */
+ssize_t get_input(info_t *);
+int _getline(info_t *, char **, size_t *);
+void sigintHandler(int);
+
+/*get info functions */
+void clear_info(info_t *);
+void set_info(info_t *, char **);
+void free_info(info_t *, int);
+
+/* environment_functions */
+char **get_environ(info_t *);
+int _setenv(info_t *, char *, char *);
+int _unsetenv(info_t *, char *);
+char *_getenv(info_t *, const char *);
+int _myenv(info_t *);
+int populate_env_list(info_t *);
+int _mysetenv(info_t *);
+int _myunsetenv(info_t *);
+
+/* get_history functions */
+char *get_history_file(info_t *info);
+int write_history(info_t *info);
+int read_history(info_t *info);
+int build_history_list(info_t *info, char *buf, int linecount);
+int renumber_history(info_t *info);
+
+/*var functions */
+int replace_alias(info_t *);
+int replace_vars(info_t *);
+int is_chain(info_t *, char *, size_t *);
+void check_chain(info_t *, char *, size_t *, size_t, size_t)
+int replace_string(char **, char *);
+
+ /* node functioins */
+list_t *add_node(list_t **, const char *, int);
+list_t *add_node_end(list_t **, const char *, int);
+size_t print_list_str(const list_t *);
+int delete_node_at_index(list_t **, unsigned int);
+void free_list(list_t **);
+list_t *node_starts_with(list_t *, char *, char);
+ssize_t get_node_index(list_t *, list_t *);
+size_t list_len(const list_t *);
+char **list_to_strings(list_t *);
+size_t print_list(const list_t *);
 
 #endif
