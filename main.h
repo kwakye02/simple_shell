@@ -148,7 +148,7 @@ int bfree(void **address);
 
 
 /*atoi.c*/
-int is_interactive_mode(data_t *data);
+int is_interactive_mode(info_t *data);
 int is_separator(char ch, char *separator);
 int is_letter(int ch);
 int str_to_int(char *str);
