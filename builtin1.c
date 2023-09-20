@@ -1,87 +1,87 @@
 #include "main.h"
+
 /**
- * show_history - displays the history list
- * one command per line with line numbers starting at 0.
- * @shell_data: Structure containing potential arguments.
- * Return: Always 0
+ * display_history - Shows the command history list with line numbers.
+ * @data: Pointer to the structure containing potential arguments.
+ *  Return: Always 0
  */
-int show_history(info_t *shell_data)
+int display_history(info_t *data)
 {
-	display_list(shell_data->history);
+	print_list(data->history);
 	return (0);
 }
+
 /**
- * remove_alias - removes an alias based on a string.
- * @data: parameter structure.
- * @str: the alias string.
- * Return: 0 on success, 1 on error.
+ * remove_alias - Removes an alias based on the given string.
+ * @data: Pointer to the structure containing potential arguments.
+ * @str: The alias string to remove.
+ * Return: 0 if successful, 1 otherwise.
  */
 int remove_alias(info_t *data, char *str)
 {
-	char *alias_part, delimiter;
-	int outcome;
+	char *delimiter_position, delimiter_char;
+	int result;
 
-	alias_part = find_char(str, '=');
-	if (!alias_part)
+	delimiter_position = _strchr(str, '=');
+	if (!delimiter_position)
 		return (1);
-	delimiter = *alias_part;
-	*alias_part = 0;
-	outcome = delete_node(&(data->alias),
-		get_node(data->alias, match_node_start(data->alias, str, -1)));
-	*alias_part = delimiter;
-	return (outcome);
+	delimiter_char = *delimiter_position;
+	*delimiter_position = 0;
+	result = delete_node_at_index(&(data->alias),
+		get_node_index(data->alias, node_starts_with(data->alias, str, -1)));
+	*delimiter_position = delimiter_char;
+	return (result);
 }
 /**
- * create_alias - sets alias based on a string.
- * @data: parameter structure.
- * @str: the alias string.
- * Return: 0 on success, 1 on error.
+ * create_alias - Sets a new alias based on the given string.
+ * @data: Pointer to the structure containing potential arguments.
+ * @str: The new alias string to set.
+ * Return: 0 if successful, 1 otherwise.
  */
 int create_alias(info_t *data, char *str)
 {
-	char *alias_part;
+	char *delimiter_position;
 
-	alias_part = find_char(str, '=');
-	if (!alias_part)
+	delimiter_position = _strchr(str, '=');
+	if (!delimiter_position)
 		return (1);
-	if (!*++alias_part)
+	if (!*++delimiter_position)
 		return (remove_alias(data, str));
 
 	remove_alias(data, str);
-	return (append_node_to_end(&(data->alias), str, 0) == NULL);
+	return (add_node_end(&(data->alias), str, 0) == NULL);
 }
-
 /**
- * display_alias - prints an alias string.
- * @alias_node: the alias node.
- * Return: 0 on success, 1 on error.
+ * display_alias - Prints the specified alias node.
+ * @alias_node: The alias node to print.
+ * Return: 0 if successful, 1 otherwise.
  */
 int display_alias(list_t *alias_node)
 {
-	char *delimiter = NULL, *ptr = NULL;
+	char *delim_position = NULL, *a_str = NULL;
 
 	if (alias_node)
 	{
-		delimiter = find_char(alias_node->str, '=');
-		for (ptr = alias_node->str; alias_ptr <= delimiter; ptr++)
-			putchar_to_output(*ptr);
-		print_string("'");
-		print_string(delimiter + 1);
-		print_string("'\n");
+		delimiter_position = _strchr(alias_node->str, '=');
+		for (*a_str = alias_node->str; a_str <= delim_position; a_str++)
+			_putchar(*a_str);
+		_putchar('\'');
+		_puts(delim_position + 1);
+		_puts("'\n");
 		return (0);
 	}
 	return (1);
 }
 
 /**
- * manage_alias - manages aliases similar to the alias builtin.
- * @data: Structure containing potential arguments.
- * Return: Always 0.
+ * manage_alias - Handles the alias command.
+ * @data: Pointer to the structure containing potential arguments.
+ *  Return: Always 0
  */
-int manage_alias(info_t *data)
+int manage_alias(data_t *data)
 {
-	int x = 0;
-	char *delimiter = NULL;
+	int arg_i = 0;
+	char *delimiter_position = NULL;
 	list_t *alias_node = NULL;
 
 	if (data->argc == 1)
@@ -94,13 +94,13 @@ int manage_alias(info_t *data)
 		}
 		return (0);
 	}
-	for (x = 1; data->argv[x]; idx++)
+	for (arg_i = 1; data->argv[arg_i]; arg_i++)
 	{
-		delimiter = find_char(data->argv[x], '=');
-		if (delimiter)
-			create_alias(data, shell_data->argv[x]);
+		delimiter_position = _strchr(data->argv[arg_i], '=');
+		if (delimiter_position)
+			create_alias(data, data->argv[arg_i]);
 		else
-			display_alias(match_node(data->alias, data->argv[x], '='));
+			display_alias(node_starts_with(data->alias, data->argv[arg_i], '='));
 	}
 
 	return (0);

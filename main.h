@@ -109,15 +109,21 @@ void find_cmd(info_t *);
 int loophsh(char **);
 
 /* path functions */
-char *dup_chars(char *, int, int);
-int is_cmd(info_t *, char *);
-char *find_path(info_t *, char *, char *);
+int is_cmd(info_t *details, char *filepath);
+char *dup_chars(char *path_data, int begin, int end);
+char *find_path(info_t *details, char *path_data, char *command);
 
 /* error_functions */
 int _eputchar(char);
 int _putfd(char c, int fd);
 void _eputs(char *);
 int _putsfd(char *str, int fd);
+int _erratoi(char *s);
+void print_error(info_t *info, char *estr);
+int print_d(int input, int fd);
+char *convert_number(long int num, int base, int flags);
+void remove_comments(char *buf);
+
 
 /*string_functions prototypes */
 char *starts_with(const char *, const char *);
@@ -135,10 +141,11 @@ char **strtow(char *, char *);
 char **strtow2(char *, char);
 
 /* memory functions */
-char *_memset(char *, char, unsigned int);
-void ffree(char **);
-void *_realloc(void *, unsigned int, unsigned int);
-int bfree(void **);
+char *_memset(char *mem, char byte, unsigned int count);
+void ffree(char **str_set);
+void *_realloc(void *mem, unsigned int prev_size, unsigned int updated_size);
+int bfree(void **address);
+
 
 /*atoi.c*/
 int is_interactive_mode(data_t *data);
@@ -146,12 +153,6 @@ int is_separator(char ch, char *separator);
 int is_letter(int ch);
 int str_to_int(char *str);
 int atoi(char *);
-/* error functions */
-void print_error(info_t *, char *);
-char *convert_number(long int, int, int);
-int _erratoi(char *);
-int print_d(int, int);
-void remove_comments(char *);
 
 /* builtin function */
 int shell_exit(info_t *data);
@@ -159,7 +160,7 @@ int shell_cd(info_t *data);
 int shell_help(info_t *data);
 
 /*builtin1 function*/
-int show_history(info_t *shell_data);
+int display_history(info_t *data);
 int remove_alias(info_t *data, char *str);
 int create_alias(info_t *data, char *str);
 int display_alias(list_t *alias_node);

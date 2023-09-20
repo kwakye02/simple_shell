@@ -1,94 +1,109 @@
 #include "main.h"
 
 /**
- * shell_exit - exits the shell
- * @data: Structure containing potential arguments.
- * Return: exits with a given exit status
- * (0) if data.argv[0] != "exit"
+ * display_history - Shows the command history list with line numbers.
+ * @data: Pointer to the structure containing potential arguments.
+ *  Return: Always 0
  */
-int shell_exit(info_t *data)
+int display_history(info_t *data)
 {
-	int status_check;
+    print_list(info->history);
+    return (0);
+}
+/**
+ * remove_alias - Removes an alias based on the given string.
+ * @data: Pointer to the structure containing potential arguments.
+ * @str: The alias string to remove.
+ *
+ * Return: 0 if successful, 1 otherwise.
+ */
+int remove_alias(info_t *data, char *str)
+{
+    char *delimiter_position, delimiter_char;
+    int result;
 
-	if (data->argv[1])
-	{
-		status_check = error_atoi(data->argv[1]);
-		if (status_check == -1)
-		{
-			data->status = 2;
-			display_error(data, "Invalid number: ");
-			error_puts(data->argv[1]);
-			error_putchar('\n');
-			return (1);
-		}
-		data->error_num = error_atoi(data->argv[1]);
-		return (-2);
-	}
-	data->error_num = -1;
-	return (-2);
+    delimiter_position = _strchr(str, '=');
+    if (!delimiter_position)
+        return (1);
+    delimiter_char = *delimiter_position;
+    *delimiter_position = 0;
+    result = delete_node_at_index(&(data->alias),
+        get_node_index(data->alias, node_starts_with(data->alias, str, -1)));
+    *delimiter_position = delimiter_char;
+    return (result);
+}
+/**
+ * create_alias - Sets a new alias based on the given string.
+ * @data: Pointer to the structure containing potential arguments.
+ * @str: The new alias string to set.
+ * Return: 0 if successful, 1 otherwise.
+ */
+int create_alias(info_t *data, char *str)
+{
+    char *delimiter_position;
+
+    delimiter_position = _strchr(str, '=');
+    if (!delimiter_position)
+        return (1);
+    if (!*++delimiter_position)
+        return (remove_alias(data, str));
+
+    remove_alias(info, str);
+    return (add_node_end(&(data->alias), str, 0) == NULL);
 }
 
 /**
- * shell_cd - changes the current directory of the process
- * @data: Structure containing potential arguments. Used to maintain
- * constant function prototype.
- * Return: Always 0
+ * display_alias - Prints the specified alias node.
+ * @alias_node: The alias node to print.
+ * Return: 0 if successful, 1 otherwise.
  */
-int shell_cd(info_t *data)
+int display_alias(list_t *alias_node)
 {
-	char *current_path, *dir, buffer[1024];
-	int cd_result;
+    char *delimiter_position = NULL, *alias_str = NULL;
 
-	current_path = getcwd(buffer, 1024);
-	if (!current_path)
-		_puts("Error: Failed to get current directory.\n");
-	if (!data->argv[1])
-	{
-		dir = get_env(data, "HOME=");
-		if (!dir)
-			cd_result = chdir((dir = get_env(data, "PWD=")) ? dir : "/");
-		else
-			cd_result = chdir(target_dir);
-	}
-	else if (_strcmp(data->argv[1], "-") == 0)
-	{
-		if (!get_env(data, "OLDPWD="))
-		{
-			_puts(current_path);
-			_putchar('\n');
-			return (1);
-		}
-		_puts(get_env(data, "OLDPWD=")), _putchar('\n');
-		cd_result = chdir((dir = get_env(data, "OLDPWD=")) ? dir : "/");
-	}
-	else
-		cd_result = chdir(shell_data->argv[1]);
-	if (cd_result == -1)
-	{
-		display_error(data, "Unable to cd to ");
-		error_puts(data->argv[1]), error_putchar('\n');
-	}
-	else
-	{
-		set_env(data, "OLDPWD", get_env(data, "PWD="));
-		set_env(data, "PWD", getcwd(buffer, 1024));
-	}
-	return (0);
+    if (alias_node)
+    {
+        delimiter_position = _strchr(alias_node->str, '=');
+        for (alias_str = alias_node->str; alias_str <= delimiter_position; alias_str++)
+            _putchar(*alias_str);
+        _putchar('\'');
+        _puts(delimiter_position + 1);
+        _puts("'\n");
+        return (0);
+    }
+    return (1);
 }
 
 /**
- * shell_help - provides help information
- * @data: Structure containing potential arguments. Used to maintain
- * constant function prototype.
- * Return: Always 0
+ * manage_alias - Handles the alias command.
+ * @info: Pointer to the structure containing potential arguments.
+ *  Return: Always 0
  */
-int shell_help(info_t *data)
+int manage_alias(info_t *info)
 {
-	char **args_list;
+    int arg_idx = 0;
+    char *delimiter_position = NULL;
+    list_t *alias_node = NULL;
 
-	args_list = data->argv;
-	_puts("Help function called. Implementation pending. \n");
-	if (0)
-		_puts(*args_list);
-	return (0);
+    if (info->argc == 1)
+    {
+        alias_node = info->alias;
+        while (alias_node)
+        {
+            display_alias(alias_node);
+            alias_node = alias_node->next;
+        }
+        return (0);
+    }
+    for (arg_idx = 1; info->argv[arg_idx]; arg_idx++)
+    {
+        delimiter_position = _strchr(info->argv[arg_idx], '=');
+        if (delimiter_position)
+            create_alias(info, info->argv[arg_idx]);
+        else
+            display_alias(node_starts_with(info->alias, info->argv[arg_idx], '='));
+    }
+
+    return (0);
 }
+
