@@ -151,8 +151,7 @@ int bfree(void **address);
 int is_interactive_mode(info_t *data);
 int is_separator(char ch, char *separator);
 int is_letter(int ch);
-int str_to_int(char *str);
-int atoi(char *str);
+int _atoi(char *str);
 
 /* builtin function */
 int shell_exit(info_t *data);

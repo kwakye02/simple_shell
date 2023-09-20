@@ -40,12 +40,12 @@ int is_alpha(int c)
 }
 
 /**
- * atoi - Convert a string to an integer
+ * _atoi - Convert a string to an integer
  * @str: string to convert
  *
  * Return: the integer representation of the string
  */
-int atoi(char *str)
+int _atoi(char *str)
 {
 	int x, sign_flag = 1, state = 0;
 	unsigned int num = 0;
