@@ -138,10 +138,9 @@ int _putchar(char c);
 /*string_functions prototypes */
 char **strtow(char *str, char *d);
 char **strtow2(char *str, char d);
-
-char *_strncat(char *, char *, int);
-char *_strncpy(char *, char *, int);
-char *_strchr(char *, char);
+char *_strncpy(char *dest, char *src, int n);
+char *_strncat(char *dest, char *src, int n);
+char *_strchr(char *s, char c);
 
 /* memory functions */
 char *_memset(char *mem, char byte, unsigned int count);
@@ -157,21 +156,23 @@ int _atoi(char *str);
 int is_delim(char ch, char *delim);
 
 /* builtin function */
-int shell_exit(info_t *data);
-int shell_cd(info_t *data);
-int shell_help(info_t *data);
+int _myexit(info_t *info);
+int _mycd(info_t *info);
+int _myhelp(info_t *info);
 
 /*builtin1 function*/
-int display_history(info_t *data);
-int remove_alias(info_t *data, char *str);
-int create_alias(info_t *data, char *str);
-int display_alias(list_t *alias_node);
-int manage_alias(info_t *data);
+int set_alias(info_t *info, char *str);
+int _myhistory(info_t *info);
+int unset_alias(info_t *info, char *str);
+int print_alias(list_t *node);
+int _myalias(info_t *info);
 
 /* getline functions */
-ssize_t get_input(info_t *);
-int _getline(info_t *, char **, size_t *);
-void sigintHandler(int);
+ssize_t input_buf(info_t *info, char **buf, size_t *len);
+ssize_t get_input(info_t *info);
+ssize_t read_buf(info_t *info, char *buf, size_t *i);
+int _getline(info_t *info, char **ptr, size_t *length);
+void sigintHandler(__attribute__((unused))int sig_num);
 
 /*get info functions */
 void clear_info(info_t *info);
@@ -179,6 +180,11 @@ void set_info(info_t *info, char **av);
 void free_info(info_t *info, int all);
 
 /* environment_functions */
+char **get_environ(info_t *info);
+int _unsetenv(info_t *info, char *var);
+int _setenv(info_t *info, char *var, char *value);
+
+
 char **get_environ(info_t *);
 int _setenv(info_t *, char *, char *);
 int _unsetenv(info_t *, char *);
