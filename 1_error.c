@@ -39,7 +39,7 @@ void print_error(info_t *info, char *estr)
 {
 	_eputs(info->fname);
 	_eputs(": ");
-	print_d(info->line_count, STDERR_FILENO);
+	print_d(info->err_line_count, STDERR_FILENO);
 	_eputs(": ");
 	_eputs(info->argv[0]);
 	_eputs(": ");
@@ -99,7 +99,7 @@ char *convert_number(long int num, int base, int flags)
 	char *end = &result[49];
 	unsigned long val = num;
 
-	*end = '\\0';
+	*end = '\0';
 	if (!(flags & CONVERT_UNSIGNED) && num < 0)
 	{
 		val = -num;
@@ -130,7 +130,7 @@ void remove_comments(char *buf)
 	{
 		if (buf[index] == '#' && (index == 0 || buf[index - 1] == ' '))
 		{
-			buf[index] = '\\0';
+			buf[index] = '\0';
 			break;
 		}
 	}

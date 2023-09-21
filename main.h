@@ -50,7 +50,7 @@ typedef struct liststr
 *@argc: count of arguments
 *@err_line_count: count of errors
 *@err_code:  Error code for exit()s
-*@cmd_path: String path for the current command
+*@path: String path for the current command
 *@env: local copy of linked list environment
 *@alias: alias node
 *@history: history node
@@ -71,7 +71,7 @@ typedef struct passinfo
 	int argc;
 	unsigned int err_line_count;
 	int err_code;
-	char *cmd_path;
+	char *path;
 	list_t *env;
 	list_t *alias;
 	list_t *history;
@@ -152,9 +152,9 @@ int bfree(void **address);
 
 /*atoi.c*/
 int is_interactive_mode(info_t *data);
-int is_separator(char ch, char *separator);
 int is_letter(int ch);
 int _atoi(char *str);
+int is_delim(char ch, char *delim);
 
 /* builtin function */
 int shell_exit(info_t *data);
@@ -174,9 +174,9 @@ int _getline(info_t *, char **, size_t *);
 void sigintHandler(int);
 
 /*get info functions */
-void clear_info(info_t *);
-void set_info(info_t *, char **);
-void free_info(info_t *, int);
+void clear_info(info_t *info);
+void set_info(info_t *info, char **av);
+void free_info(info_t *info, int all);
 
 /* environment_functions */
 char **get_environ(info_t *);
@@ -192,8 +192,8 @@ int _myunsetenv(info_t *);
 char *get_history_file(info_t *info);
 int write_history(info_t *info);
 int read_history(info_t *info);
-int build_history_list(info_t *info, char *buf, int linecount);
 int renumber_history(info_t *info);
+int build_history_list(info_t *info, char *data_buffer, int total_entries);
 
 /*var functions */
 int is_chain(info_t *info, char *buf, size_t *p);
@@ -202,16 +202,16 @@ int replace_alias(info_t *info);
 int replace_vars(info_t *info);
 int replace_string(char **old, char *new);
 
- /* node functioins */
-list_t *add_node(list_t **, const char *, int);
-list_t *add_node_end(list_t **, const char *, int);
-size_t print_list_str(const list_t *);
-int delete_node_at_index(list_t **, unsigned int);
-void free_list(list_t **);
-list_t *node_starts_with(list_t *, char *, char);
-ssize_t get_node_index(list_t *, list_t *);
-size_t list_len(const list_t *);
-char **list_to_strings(list_t *);
-size_t print_list(const list_t *);
+/*node functions*/
+list_t *add_node(list_t **head_ptr, const char *string, int idx);
+list_t *add_node_end(list_t **head_ptr, const char *string, int idx);
+size_t print_list_str(const list_t *head);
+int delete_node_at_index(list_t **head_ptr, unsigned int idx);
+void free_list(list_t **head_ref);
+size_t list_len(const list_t *h);
+char **list_to_strings(list_t *head);
+size_t print_list(const list_t *h);
+list_t *node_starts_with(list_t *node, char *prefix, char c);
+ssize_t get_node_index(list_t *head, list_t *node);
 
 #endif

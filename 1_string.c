@@ -30,7 +30,7 @@ char *_strcpy(char *dest, char *src)
 char *_strdup(const char *str)
 {
 	char *copy;
-	int len = 0;
+	int i, len = 0;
 
 	if (!str)
 		return (NULL);
@@ -39,7 +39,7 @@ char *_strdup(const char *str)
 	copy = malloc(sizeof(char) * (len + 1));
 	if (!copy)
 		return (NULL);
-	for (int i = 0; i <= len; i++)
+	for (i = 0; i <= len; i++)
 		copy[i] = str[i];
 
 	return (copy);

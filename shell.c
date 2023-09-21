@@ -13,31 +13,31 @@ int hsh(info_t *data, char **argument_vector)
 
 	while (read_val != -1 && builtin_results != -2)
 	{
-		clear_data(data);
-		if (interactive(data))
+		clear_info(data);
+		if (is_interactive_mode(data))
 			_puts("$ ");
 		_eputchar(BUF_FLUSH);
 		read_val = get_input(data);
 		if (read_val != -1)
 		{
-			set_data(data, argument_vector);
+			set_info(data, argument_vector);
 			builtin_results = find_builtin(data);
 			if (builtin_results == -1)
 				find_cmd(data);
 		}
-		else if (interactive(data))
+		else if (is_interactive_mode(data))
 			_putchar('\n');
-		free_data(data, 0);
+		free_info(data, 0);
 	}
 	write_history(data);
-	free_data(data, 1);
-	if (!interactive(data) && data->status)
+	free_info(data, 1);
+	if (!is_interactive_mode(data) && data->status)
 		exit(data->status);
 	if (builtin_results == -2)
 	{
-		if (data->err_num == -1)
+		if (data->err_code == -1)
 			exit(data->status);
-		exit(data->err_num);
+		exit(data->err_code);
 	}
 	return (builtin_results);
 }
@@ -89,7 +89,7 @@ void find_cmd(info_t *data)
 	data->path = data->argv[0];
 	if (data->linecount_flag == 1)
 	{
-		data->line_count++;
+		data->err_line_count++;
 		data->linecount_flag = 0;
 	}
 	for (char_count = 0, i = 0; data->arg[i]; i++)
@@ -106,7 +106,7 @@ void find_cmd(info_t *data)
 	}
 	else
 	{
-		if ((interactive(data) || _getenv(data, "PATH=")
+		if ((is_interactive_mode(data) || _getenv(data, "PATH=")
 					|| data->argv[0][0] == '/') && is_cmd(data, data->argv[0]))
 			fork_cmd(data);
 		else if (*(data->arg) != '\n')
