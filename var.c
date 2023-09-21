@@ -1,12 +1,12 @@
 #include "main.h"
 
 /**
- *is_chain_delim - Verify if current char in buffer is a command delimiter
- * @info: the parameter structure
- * @buf: the char buffer
- * @p: current position in buf
- * Return: 1 or 0
- */
+*is_chain - Verify if current char in buffer is a command delimiter
+* @info: the parameter structure
+* @buf: the char buffer
+* @p: current position in buf
+* Return: 1 or 0
+*/
 int is_chain(info_t *info, char *buf, size_t *p)
 {
 	size_t pos = *p;
@@ -34,14 +34,14 @@ int is_chain(info_t *info, char *buf, size_t *p)
 	return (1);
 }
 /**
- * check_chain - Decide if chaining should continue based on last status
- * @info: the parameter structure
- * @buf: the char buffer
- * @p: current position in buf
- * @i: starting position in buf
- * @len: length of buf
- * Return: void
- */
+* check_chain - Decide if chaining should continue based on last status
+* @info: the parameter structure
+* @buf: the char buffer
+* @p: current position in buf
+* @i: starting position in buf
+* @len: length of buf
+* Return: void
+*/
 void check_chain(info_t *info, char *buf, size_t *p, size_t i, size_t len)
 {
 	size_t pos = *p;
@@ -59,11 +59,10 @@ void check_chain(info_t *info, char *buf, size_t *p, size_t i, size_t len)
 	*p = pos;
 }
 /**
- * replace_alias - Substitute aliases in the tokenized string
- * @info: the parameter structure
- *
- * Return: 1 or 0
- */
+* replace_alias - Substitute aliases in the tokenized string
+* @info: the parameter structure
+* Return: 1 or 0
+*/
 int replace_alias(info_t *info)
 {
 	int count;
@@ -87,10 +86,10 @@ int replace_alias(info_t *info)
 	return (1);
 }
 /**
- * replace_vars - Substitute variables in the tokenized string
- * @info: the parameter structure
- * Return: 1 or 0
- */
+* replace_vars - Substitute variables in the tokenized string
+* @info: the parameter structure
+* Return: 1 or 0
+*/
 int replace_vars(info_t *info)
 {
 	int x;
@@ -125,11 +124,11 @@ int replace_vars(info_t *info)
 	return (0);
 }
 /**
- * replace_string - Swap the old string with a new one
- * @old: address of old string
- * @new: new string to replace with
- * Return: 1 or 0
- */
+* replace_string - Swap the old string with a new one
+* @old: address of old string
+* @new: new string to replace with
+* Return: 1 or 0
+*/
 int replace_string(char **old, char *new)
 {
 	free(*old);
