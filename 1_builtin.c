@@ -7,7 +7,7 @@
  */
 int _myhistory(info_t *info)
 {
-	Print_list(info->history);
+	print_list(info->history);
 	return (0);
 }
 /**

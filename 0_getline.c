@@ -128,12 +128,12 @@ int _getline(info_t *info, char **ptr, size_t *length)
 	if (!new_ptr)
 		return (temp_ptr ? free(temp_ptr), -1 : -1);
 
-	if (buffer_size)
+	if (buf_size)
 		_strncat(new_ptr, local_buf + pos, c - pos);
 	else
 		_strncpy(new_ptr, local_buf + pos, c - pos + 1);
 
-	buffer_size += c - pos;
+	buf_size += c - pos;
 	pos = c;
 	temp_ptr = new_ptr;
 

@@ -60,7 +60,7 @@ int _myunsetenv(info_t *current_info)
 		_eputs("Insufficient arguments provided.\n");
 		return (1);
 	}
-	for (idx = 1; idx <= current_info->argc; x++)
+	for (x = 1; x <= current_info->argc; x++)
 		_unsetenv(current_info, current_info->argv[x]);
 
 	return (0);

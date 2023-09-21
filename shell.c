@@ -66,10 +66,10 @@ int find_builtin(info_t *data)
 		{NULL, NULL}
 	};
 
-	for (i = 0; builtintbl[x].type; x++)
+	for (x = 0; builtintbl[x].type; x++)
 		if (_strcmp(data->argv[0], builtintbl[x].type) == 0)
 		{
-			data->line_count++;
+			data->err_line_count++;
 			builtin_results = builtintbl[x].func(data);
 			break;
 		}
@@ -101,7 +101,7 @@ void find_cmd(info_t *data)
 	cmd_path = find_path(data, _getenv(data, "PATH="), data->argv[0]);
 	if (cmd_path)
 	{
-		data->path = path;
+		data->path = cmd_path;
 		fork_cmd(data);
 	}
 	else
@@ -137,7 +137,7 @@ void fork_cmd(info_t *data)
 	{
 		if (execve(data->path, data->argv, get_environ(data)) == -1)
 		{
-			free_data(data, 1);
+			free_info(data, 1);
 			if (errno == EACCES)
 				exit(126);
 			exit(1);

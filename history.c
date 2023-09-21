@@ -8,7 +8,7 @@ char *get_history_file(info_t *info)
 {
 	char *path_buffer, *dir;
 
-	home_directory = _getenv(info, "HOME=");
+	dir = _getenv(info, "HOME=");
 	if (!dir)
 		return (NULL);
 
