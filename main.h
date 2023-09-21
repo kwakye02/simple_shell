@@ -184,15 +184,11 @@ char **get_environ(info_t *info);
 int _unsetenv(info_t *info, char *var);
 int _setenv(info_t *info, char *var, char *value);
 
-
-char **get_environ(info_t *);
-int _setenv(info_t *, char *, char *);
-int _unsetenv(info_t *, char *);
-char *_getenv(info_t *, const char *);
-int _myenv(info_t *);
-int populate_env_list(info_t *);
-int _mysetenv(info_t *);
-int _myunsetenv(info_t *);
+int _myenv(info_t *current_info);
+char *_getenv(info_t *current_info, const char *variable_name);
+int _mysetenv(info_t *current_info);
+int _myunsetenv(info_t *current_info);
+int populate_env_list(info_t *current_info);
 
 /* get_history functions */
 char *get_history_file(info_t *info);
